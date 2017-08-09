@@ -1,0 +1,38 @@
+How to set value in Session from Api Method parameter
+-------------------------------------------------------
+
+Controller
+---------------
+@Controller
+public class MyController
+{
+public ResponseEntity<MasterResponse> myTestApi(@SessionAttribute(SSOFilter.USER) User user,
+{
+	//Do Something with that User
+	System.out.println(user.getCompanyId());//Any field from that user
+	
+
+}
+}
+
+
+Filter class
+-------------
+@Component
+public class MobileAppServeriConsoleFilter implements Filter
+{
+
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+			ServletException
+	{
+	
+		String username = httpRequest.getHeader("username");
+		String emailAddress = httpRequest.getHeader("emailAddress");
+		
+		User user = AppHelper.getTMSUser(emailAddress, companyId);
+		HttpSession session = ((HttpServletRequest) request).getSession();
+		session.setAttribute(SSOFilter.USER, user);
+		chain.doFilter(httpRequest, httpResponse);
+	}
+}
