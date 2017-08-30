@@ -1,0 +1,9 @@
+public ResponseEntity replaceProperties(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+			byte[] bytes = multipartFile.getBytes();
+			File serverFile = new File("src/main/resources/" + multipartFile.getOriginalFilename());
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+			stream.write(bytes);
+			stream.close();
+
+		return new ResponseEntity(HttpStatus.valueOf(200));
+	}
