@@ -1,0 +1,28 @@
+String byteString = someString;
+// String filePath = "D:/Output/b.docx";
+			// byte[] byteArray1 = Files.readAllBytes(new File(filePath).toPath());
+			// System.out.println(byteArray1);
+			// byte[] byteArray = byteString.getBytes();
+			// System.out.println(byteArray);
+
+			byte[] parseBase64Binary = DatatypeConverter.parseBase64Binary(byteString);
+			// Files.write(Paths.get("test.txt"),parseBase64Binary );
+
+			File dir = new File("D:/Output");
+			File tagFile;
+			if (!dir.exists()) {
+				dir.mkdir();
+			}
+			String fileName = "test";
+			tagFile = new File(dir, fileName + "." + fileType);
+			if (!tagFile.exists()) {
+				tagFile.createNewFile();
+			}
+
+			try (FileOutputStream outputStream = new FileOutputStream(tagFile);) {
+
+				outputStream.write(parseBase64Binary);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
