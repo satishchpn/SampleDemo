@@ -1,0 +1,74 @@
+Help Url
+https://github.com/MOSDEV82/fcmhelper/blob/master/FCMHelper.java
+https://firebase.google.com/docs/cloud-messaging/send-message
+
+
+package com.zycus.mobileappserver.event.subscriber;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import com.zycus.mobileappserver.data.Notification;
+
+public class FCMPushNotification
+{
+
+	/**
+	 * Google URL to use Firebase cloud messaging
+	 */
+	private static final String	URL_SEND		= "https://fcm.googleapis.com/fcm/send";
+
+	/**
+	 * Static Values
+	 */
+
+	public static final String	TYPE_TO			= "to";
+
+	public static final String	TOPIC_NAME		= "/topics/newsss";
+	/**
+	 * Your SECRET  key
+	 */
+	private static final String	FCM_SERVER_KEY	= "key=AAAAIQocLkI:APA91bH_GYMCTO7Sx23QGd0KqtpL11zeLb8S4wjGonoNHGBEMMY1yMYWtxEhXcRygjyC3--4mP5Bpsk2-I2SShSIeTP0lGJ83fCywRpwAkEL2WS4xAaSRwweY3oBuGnNBXozGD7A0UXx";
+
+	/**
+	 * Send Firebase Cloud Message
+	 * @param notificationObject - Notification Data
+	 * @return
+	 * @throws IOException
+	 * @throws UnirestException 
+	 */
+	private static String sendFcmMessage(JsonObject notificationObject) throws IOException, UnirestException
+	{
+		JsonObject sendObject = new JsonObject();
+		sendObject.addProperty(TYPE_TO, "/topics/newsss");
+		if (notificationObject != null)
+			sendObject.add("notification", notificationObject);
+		System.out.println(sendObject.toString());
+		HttpResponse<String> httpResponse;
+		Map<String, String> requestHeaders = new HashMap<String, String>();
+		requestHeaders.put("Authorization", FCM_SERVER_KEY);
+		requestHeaders.put("Content-Type", "application/json");
+		httpResponse = Unirest.post(URL_SEND).headers(requestHeaders).body(sendObject.toString()).asString();
+		return httpResponse.getBody();
+
+	}
+
+	public static void main(String[] args) throws IOException, UnirestException
+	{
+		Notification notificationObject = new Notification();
+		notificationObject.set_id("101");
+		notificationObject.setCreatorName("Satish");
+		notificationObject.setCreatorType("Admin");
+		Gson gson = new Gson();
+		JsonObject jsonObject = gson.fromJson(notificationObject.toString(), JsonObject.class);
+		String response = sendFcmMessage(jsonObject);
+		System.out.println("Response: " + response);
+	}
+
+}
