@@ -1,0 +1,12 @@
+public HttpEntity<byte[]> download(@PathVariable("fileName") String fileName) throws IOException
+	{
+		File file = new File("src/main/resources/" + fileName + ".properties");
+		byte[] document = FileCopyUtils.copyToByteArray(file);
+
+		HttpHeaders header = new HttpHeaders();
+		header.setContentType(new MediaType("application", "pdf"));
+		header.set("Content-Disposition", "inline; filename=" + file.getName());
+		header.setContentLength(document.length);
+
+		return new HttpEntity<byte[]>(document, header);
+	}
