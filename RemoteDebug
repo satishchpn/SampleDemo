@@ -1,0 +1,17 @@
+		
+Add options in configuration file
+---------------------------------------
+-Xdebug -Xrunjdwp:transport=dt_socket,address=28878,server=y,suspend=n"
+
+Like this
+--------------
+local javaOptions="$JAVA_OPTS $javaGCTune $javaJmxOptions -Dfile.encoding=$javaFileEnc \
+        -Xms$javaHeapMem -Xmx$javaHeapMem \
+        -XX:PermSize=$javaPGenMem -XX:MaxPermSize=$javaPGenMem \
+        -Djava.io.tmpdir=\"$javaTempDir\" -Duser.timezone=\"$javaTimeZone\" -Xdebug -Xrunjdwp:transport=dt_socket,address=28878,server=y,suspend=n"
+		
+Right click on project>> Remote Java Application>>Give Name(Anything)>>Give host>> give port no as you metioned in configuration file(here it is 28878)
+Click on Debug>>>It will start
+One Red button will appear on eclipse taskbar like music .
+If Want to disconnect then click on that.
+At a time only one user can connect.
